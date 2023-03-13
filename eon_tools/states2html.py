@@ -34,7 +34,8 @@ def find_processes(statespath,statename):
     table = []
     for process in intable:
         process = process.split()
-        table.append(process[0])
+        if process[3] != "-1":
+            table.append(process[0])
     return table
 
 def convert_con2png(statespath,statename,processname):
