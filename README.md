@@ -28,4 +28,5 @@ Tools that operate on this entire data collection will have the string "states" 
 These tools use the following packages:
 
 * [Atomic Simulation Environment (ASE)](https://wiki.fysik.dtu.dk/ase/index.html)
+* [python-pptx](https://python-pptx.readthedocs.io/en/latest/index.html)
 
