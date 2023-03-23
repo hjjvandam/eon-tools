@@ -69,7 +69,7 @@ def convert_con2img(statespath,statename,processname,movies):
         write(fn_product+".xyz",structure_p)
     
 
-def html_process(fp_html,statespath,statename,processname,movies):
+def html_process(fp_html,statespath,statename,processname,movies,count):
     '''
     Add the process images to the HTML file
 
@@ -85,18 +85,23 @@ def html_process(fp_html,statespath,statename,processname,movies):
     fp_html.write(processname)
     fp_html.write("</TD><TD>")
     if movies:
-        line="<script>jmolApplet(400,\"load "+fn_reaction+"\",\"0\")</script>"
+        line="<script>jmolApplet(400,\"load "+fn_reaction+"; anim mode loop; anim play\",\""+str(count)+"\")</script>"
         fp_html.write(line)
+        count+=1
     else:
-        line="<script>jmolApplet(200,\"load "+fn_reactant+"\",\"0\")</script>"
+        line="<script>jmolApplet(200,\"load "+fn_reactant+"\",\""+str(count)+"\")</script>"
         fp_html.write(line)
+        count+=1
         fp_html.write("</TD><TD>")
-        line="<script>jmolApplet(200,\"load "+fn_saddle+"\",\"0\")</script>"
+        line="<script>jmolApplet(200,\"load "+fn_saddle+"\",\""+str(count)+"\")</script>"
         fp_html.write(line)
+        count+=1
         fp_html.write("</TD><TD>")
-        line="<script>jmolApplet(200,\"load "+fn_product+"\",\"0\")</script>"
+        line="<script>jmolApplet(200,\"load "+fn_product+"\",\""+str(count)+"\")</script>"
         fp_html.write(line)
+        count+=1
     fp_html.write("</TD></TR>\n")
+    return count
 
 def doit(statespath,movies):
     '''
@@ -108,18 +113,19 @@ def doit(statespath,movies):
     fp_html.write("<!DOCTYPE HTML>\n")
     fp_html.write("<HTML>\n")
     fp_html.write("<HEAD>\n")
-    fp_html.write("  <SCRIPT src="../jmol/jsmol/JSmol.min.js"></script>\n")
-    fp_html.write("  <SCRIPT src="../jmol/jsmol/js/Jmol2.js"></script>\n")
-    fp_html.write("  <SCRIPT> jmolInitialize("../jmol/jsmol");</script>\n")
+    fp_html.write("  <SCRIPT src=\"/jmol/jsmol/JSmol.min.js\"></script>\n")
+    fp_html.write("  <SCRIPT src=\"/jmol/jsmol/js/Jmol2.js\"></script>\n")
+    fp_html.write("  <SCRIPT> jmolInitialize(\"/jmol/jsmol\");</script>\n")
     fp_html.write("</HEAD>\n")
     fp_html.write("<BODY>\n")
     fp_html.write("<TABLE>\n")
     stateslist = find_states(statespath)
+    count = 0
     for state in stateslist:
         processlist = find_processes(statespath,state)
         for process in processlist:
             convert_con2img(statespath,state,process,movies)
-            html_process(fp_html,statespath,state,process,movies)
+            count = html_process(fp_html,statespath,state,process,movies,count)
     fp_html.write("</TABLE>\n")
     fp_html.write("</BODY>\n")
     fp_html.write("</HTML>\n")
